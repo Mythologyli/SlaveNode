@@ -53,6 +53,15 @@ void SystemClock_Config(void)
 }
 
 /**
+  * @brief  禁用 JTAG，释放相应 GPIO
+  */
+void DisableJTAG(void)
+{
+    __HAL_RCC_AFIO_CLK_ENABLE();
+    __HAL_AFIO_REMAP_SWJ_NOJTAG();
+}
+
+/**
   * @brief  错误处理函数。调用后通过 printf 报告错误文件、行数并进入死循环
   * @param  file: pointer to the source file name
   * @param  line: assert_param error line source number
