@@ -339,7 +339,7 @@
               <MiscControls></MiscControls>
               <Define>USE_HAL_DRIVER, STM32F103x6</Define>
               <Undefine></Undefine>
-              <IncludePath>..\Core;..\Libraries\HAL_Lib\Inc;..\Libraries\SoftSPI_HAL_Lib;..\User\Main;..\System\sys;..\System\systick;..\System\uart;..\Hardware\led</IncludePath>
+              <IncludePath>..\Core;..\Libraries\HAL_Lib\Inc;..\Libraries\SoftSPI_HAL_Lib;..\Libraries\SoftI2C_HAL_Lib;..\User\Main;..\System\sys;..\System\systick;..\System\uart;..\Hardware\led</IncludePath>
             </VariousControls>
           </Cads>
           <Aads>
@@ -647,6 +647,21 @@
               <FileName>softspi.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\Libraries\SoftSPI_HAL_Lib\softspi.c</FilePath>
+            </File>
+          </Files>
+        </Group>
+        <Group>
+          <GroupName>SoftI2C_HAL_Lib</GroupName>
+          <Files>
+            <File>
+              <FileName>softi2c_conf.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>..\Libraries\SoftI2C_HAL_Lib\softi2c_conf.h</FilePath>
+            </File>
+            <File>
+              <FileName>softi2c.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\Libraries\SoftI2C_HAL_Lib\softi2c.c</FilePath>
             </File>
           </Files>
         </Group>
