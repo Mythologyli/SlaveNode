@@ -1,14 +1,15 @@
 /**
  * @file    main.c
  * @author  Myth
- * @version 0.3
- * @date    2021.10.12
+ * @version 0.5
+ * @date    2021.10.14
  * @brief   工程主函数文件
  * @details 初始化及主循环
  * @note    此版本实现功能：
  *          串口回显，回显时 PC13 上的 LED 闪烁
  *          软件 I2C
  *          AHT20 温度湿度读取
+ *          BH1750 光照度读取
  *          JTAG 已禁用，请使用 SWD 调试
  */
 
@@ -20,6 +21,7 @@
 
 #include "led.h"
 #include "aht20.h"
+#include "bh1750.h"
 
 void Echo(uint8_t byte);
 
@@ -41,6 +43,8 @@ int main(void)
     AHT20_Init(); //初始化 AHT20
     float humi, temp;
 
+    BH1750_Init(); //初始化 BH1750
+
     while (1)
     {
         //程序主循环
@@ -48,6 +52,8 @@ int main(void)
             printf("humi: %.1f temp: %.1f\n", humi, temp);
         else
             printf("fail to read AHT20.\n");
+
+        printf("light: %f\n", BH1750_Read()); //读取 BH1750
 
         Delay_ms(500);
     }
