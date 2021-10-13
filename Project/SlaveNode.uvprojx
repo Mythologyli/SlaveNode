@@ -339,7 +339,7 @@
               <MiscControls></MiscControls>
               <Define>USE_HAL_DRIVER, STM32F103x6</Define>
               <Undefine></Undefine>
-              <IncludePath>..\Core;..\Libraries\HAL_Lib\Inc;..\Libraries\SoftSPI_HAL_Lib;..\Libraries\SoftI2C_HAL_Lib;..\User\Main;..\System\sys;..\System\systick;..\System\uart;..\Hardware\led</IncludePath>
+              <IncludePath>..\Core;..\Libraries\HAL_Lib\Inc;..\Libraries\SoftSPI_HAL_Lib;..\Libraries\SoftI2C_HAL_Lib;..\User\Main;..\System\sys;..\System\systick;..\System\uart;..\Hardware\led;..\Hardware\aht20</IncludePath>
             </VariousControls>
           </Cads>
           <Aads>
@@ -692,6 +692,11 @@
               <FileName>led.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\Hardware\led\led.c</FilePath>
+            </File>
+            <File>
+              <FileName>aht20.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\Hardware\aht20\aht20.c</FilePath>
             </File>
           </Files>
         </Group>
