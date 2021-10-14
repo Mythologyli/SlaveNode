@@ -1,8 +1,8 @@
 /**
  * @file    aht20.h
  * @author  Myth
- * @version 0.1
- * @date    2021.10.13
+ * @version 0.2
+ * @date    2021.10.15
  * @brief   AHT20 驱动
  */
 
@@ -16,6 +16,8 @@
 #define AHT20_SCL_PIN GPIO_PIN_4
 
 void AHT20_Init(void);
+void AHT20_Start(void);
 uint8_t AHT20_Read(float *humi, float *temp);
+uint8_t AHT20_StartAndRead(float *humi, float *temp);
 
 #endif

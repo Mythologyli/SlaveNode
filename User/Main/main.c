@@ -1,15 +1,14 @@
 /**
  * @file    main.c
  * @author  Myth
- * @version 0.5
- * @date    2021.10.14
+ * @version 0.6
+ * @date    2021.10.15
  * @brief   工程主函数文件
  * @details 初始化及主循环
  * @note    此版本实现功能：
  *          串口回显，回显时 PC13 上的 LED 闪烁
- *          软件 I2C
- *          AHT20 温度湿度读取
- *          BH1750 光照度读取
+ *          AHT20 温度湿度读取及 BH1750 光照度读取
+ *          此版本实现了 AHT20 和 BH1750 的最高速读取。每一次读取结束后 LED 闪烁
  *          JTAG 已禁用，请使用 SWD 调试
  */
 
@@ -44,27 +43,33 @@ int main(void)
     float humi, temp;
 
     BH1750_Init(); //初始化 BH1750
+    float light;
 
     while (1)
     {
         //程序主循环
-        if (AHT20_Read(&humi, &temp)) //读取 AHT20
-            printf("humi: %.1f temp: %.1f\n", humi, temp);
-        else
-            printf("fail to read AHT20.\n");
+        AHT20_Start();  // AHT20 开始测量
+        BH1750_Start(); // BH1750 开始测量
 
-        printf("light: %f\n", BH1750_Read()); //读取 BH1750
+        Delay_ms(80);
 
-        Delay_ms(500);
+        AHT20_Read(&humi, &temp); //读取 AHT20
+
+        Delay_ms(100);
+
+        light = BH1750_Read(); //读取 BH1750
+
+        printf("humi: %.1f    temp: %.1f    light: %.1f\n", humi, temp, light);
+        LED1_Toggle;
     }
 
     return 1;
 }
 
 /**
-  * @brief  串口回显函数
-  * @param  byte: 本次中断接收到的字节
-  */
+ * @brief  串口回显函数
+ * @param  byte: 本次中断接收到的字节
+ */
 void Echo(uint8_t byte)
 {
     LED1_Slow_Toggle;

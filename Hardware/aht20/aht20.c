@@ -1,8 +1,8 @@
 /**
  * @file    aht20.c
  * @author  Myth
- * @version 0.1
- * @date    2021.10.13
+ * @version 0.2
+ * @date    2021.10.15
  * @brief   AHT20 驱动
  */
 
@@ -25,8 +25,8 @@ SoftI2C_TypeDef aht20_i2c;
 uint8_t AHT20_Read_Status(void);
 
 /**
-  * @brief  初始化 AHT20
-  */
+ * @brief  初始化 AHT20
+ */
 void AHT20_Init(void)
 {
     aht20_i2c.SDA_GPIO = AHT20_GPIO;
@@ -72,9 +72,9 @@ void AHT20_Init(void)
 }
 
 /**
-  * @brief  读取 AHT20 状态字
-  * @retval 状态字
-  */
+ * @brief  读取 AHT20 状态字
+ * @retval 状态字
+ */
 uint8_t AHT20_Read_Status(void)
 {
     uint8_t data;
@@ -93,21 +93,10 @@ uint8_t AHT20_Read_Status(void)
 }
 
 /**
-  * @brief  读取 AHT20 数据
-  * @param  humi: 浮点数指针，储存湿度
-  * @param  temp: 浮点数指针，储存温度
-  * @retval 读取成功返回 1，读取失败返回 0
-  */
-uint8_t AHT20_Read(float *humi, float *temp)
+ * @brief  向 AHT20 发送测量命令。需等待 80ms 后才能读取数据
+ */
+void AHT20_Start(void)
 {
-    uint8_t byte1 = 0;
-    uint8_t byte2 = 0;
-    uint8_t byte3 = 0;
-    uint8_t byte4 = 0;
-    uint8_t byte5 = 0;
-    uint8_t byte6 = 0;
-    uint32_t data32 = 0;
-
     //发送 AC 指令请求数据
     I2C_Start;
     I2C_WriteByte(0x70);
@@ -119,8 +108,23 @@ uint8_t AHT20_Read(float *humi, float *temp)
     I2C_WriteByte(0x00);
     I2C_WaitAck;
     I2C_Stop;
+}
 
-    Delay_ms(80); //延时 80ms，等待 AHT20 生成数据
+/**
+ * @brief  读取 AHT20 数据。在发送测量命令至少 80ms 后调用
+ * @param  humi: 浮点数指针，储存湿度
+ * @param  temp: 浮点数指针，储存温度
+ * @retval 读取成功返回 1，读取失败返回 0
+ */
+uint8_t AHT20_Read(float *humi, float *temp)
+{
+    uint8_t byte1 = 0;
+    uint8_t byte2 = 0;
+    uint8_t byte3 = 0;
+    uint8_t byte4 = 0;
+    uint8_t byte5 = 0;
+    uint8_t byte6 = 0;
+    uint32_t data32 = 0;
 
     uint16_t count = 0;
     while (((AHT20_Read_Status() & 0x80) == 0x80)) //等待状态字最高位变为 1，说明数据准备完成
@@ -160,4 +164,17 @@ uint8_t AHT20_Read(float *humi, float *temp)
     *temp = ((float)data32 * 200 * 10 / 1024 / 1024 - 500) / 10.0; //温度
 
     return 1;
+}
+
+/**
+ * @brief  发送测量命令，等待 80ms 并读取 AHT20 数据
+ * @param  humi: 浮点数指针，储存湿度
+ * @param  temp: 浮点数指针，储存温度
+ * @retval 读取成功返回 1，读取失败返回 0
+ */
+uint8_t AHT20_StartAndRead(float *humi, float *temp)
+{
+    AHT20_Start();
+    Delay_ms(80); //延时 80ms，等待 AHT20 生成数据
+    return AHT20_Read(humi, temp);
 }

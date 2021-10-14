@@ -1,8 +1,8 @@
 /**
  * @file    bh1750.c
  * @author  Myth
- * @version 0.1
- * @date    2021.10.14
+ * @version 0.2
+ * @date    2021.10.15
  * @brief   BH1750 驱动
  */
 
@@ -26,8 +26,8 @@
 SoftI2C_TypeDef bh1750_i2c;
 
 /**
-  * @brief  初始化 BH1750
-  */
+ * @brief  初始化 BH1750
+ */
 void BH1750_Init(void)
 {
     bh1750_i2c.SDA_GPIO = BH1750_GPIO;
@@ -51,23 +51,27 @@ void BH1750_Init(void)
 }
 
 /**
-  * @brief  读取 BH1750 数据
-  * @retval 读数
-  */
-float BH1750_Read(void)
+ * @brief  向 BH1750 发送测量命令。需等待 180ms 后才能读取数据
+ */
+void BH1750_Start(void)
 {
-    uint8_t i;
-    uint8_t byte1;
-    uint8_t byte2;
-
     I2C_Start;
     I2C_WriteByte(SLAVE_ADDR_WR);
     I2C_WaitAck;
     I2C_WriteByte(0x10);
     I2C_WaitAck;
     I2C_Stop;
+}
 
-    Delay_ms(180);
+/**
+ * @brief  读取 BH1750 数据。在发送测量命令至少 180ms 后调用
+ * @retval 读数
+ */
+float BH1750_Read(void)
+{
+    uint8_t i;
+    uint8_t byte1;
+    uint8_t byte2;
 
     I2C_Start;
     I2C_WriteByte(SLAVE_ADDR_RD);
@@ -82,4 +86,15 @@ float BH1750_Read(void)
     I2C_Stop;
 
     return (float)((byte1 << 8) + byte2) / 1.2;
+}
+
+/**
+ * @brief  发送测量命令，等待 180ms 并读取 BH1750 数据
+ * @retval 读数
+ */
+float BH1750_StartAndRead(void)
+{
+    BH1750_Start();
+    Delay_ms(180);
+    return BH1750_Read();
 }
