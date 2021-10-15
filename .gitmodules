@@ -4,3 +4,6 @@
 [submodule "Libraries/SoftI2C_HAL_Lib"]
 	path = Libraries/SoftI2C_HAL_Lib
 	url = https://hub.akashic.cc/GML-Group/SoftI2C_HAL_Lib.git
+[submodule "Libraries/SX1278"]
+	path = Libraries/SX1278
+	url = https://hub.akashic.cc/GML-Group/SX1278.git
