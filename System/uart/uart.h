@@ -15,9 +15,11 @@
 #ifndef __UART_H
 #define __UART_H
 
+#include "sys.h"
+
 //注释此处语句可禁用特定串口
 #define UART1_FIFO_EN 1
-#define UART2_FIFO_EN 1
+#define UART2_FIFO_EN 0
 
 //定义端口号
 typedef enum
@@ -35,8 +37,8 @@ typedef enum
 
 #if UART2_FIFO_EN == 1
 #define UART2_BAUD 115200
-#define UART2_TX_BUF_SIZE 1 * 64
-#define UART2_RX_BUF_SIZE 1 * 64
+#define UART2_TX_BUF_SIZE 1 * 512
+#define UART2_RX_BUF_SIZE 1 * 512
 #endif
 
 //回调函数定义
